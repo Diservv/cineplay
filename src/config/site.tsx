@@ -128,7 +128,7 @@ export const siteConfig: SiteConfigType = {
     ],
   },
   socials: {
-    github: "https://kaptech/services/cineplay",
+    github: "https://kaptech/services/cineplay.app.html",
   },
 };
 
