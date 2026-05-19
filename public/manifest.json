@@ -1,13 +1,13 @@
 {
-  "name": "Cinextma",
-  "short_name": "Cinextma",
-  "description": "Your only choice for a free movies and tv shows streaming website.",
+  "name": "Cineplay",
+  "short_name": "Cineplay",
+  "description": "Sua única escolha para um site de streaming de filmes e programas de TV gratuitos.",
   "theme_color": "#0D0C0F",
   "background_color": "#0D0C0F",
   "start_url": "/",
   "display": "standalone",
   "orientation": "portrait",
-  "lang": "en-US",
+  "lang": "pt-br",
   "icons": [
     {
       "type": "image/png",

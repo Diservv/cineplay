@@ -14,8 +14,8 @@ import {
 import { TbFolder, TbFolderFilled } from "react-icons/tb";
 
 export const siteConfig: SiteConfigType = {
-  name: "Cinextma",
-  description: "Your only choice for a free movies and tv shows streaming website.",
+  name: "Cineplay",
+  description: "Sua única escolha para um site de streaming de filmes e programas de TV gratuitos.",
   favicon: "/favicon.ico",
   navItems: [
     {
@@ -128,7 +128,7 @@ export const siteConfig: SiteConfigType = {
     ],
   },
   socials: {
-    github: "https://github.com/wisnuwirayuda15/cinextma",
+    github: "https://kaptech/services/cineplay",
   },
 };
 
