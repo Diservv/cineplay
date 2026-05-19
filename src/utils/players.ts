@@ -38,7 +38,7 @@ export const getMoviePlayers = (id: string | number, startAt?: number): PlayersP
       resumable: true,
     },
     {
-      title: "EmbedPlay_pt-BR",
+      title: "EmbedPlay-pt",
       source: `https://embedplayapi.top/embed/${id}`,
       fast: true,
       ads: true,
