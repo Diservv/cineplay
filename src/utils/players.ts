@@ -38,6 +38,12 @@ export const getMoviePlayers = (id: string | number, startAt?: number): PlayersP
       resumable: true,
     },
     {
+      title: "EmbedPlay_pt-BR",
+      source: `https://embedplayapi.top/embed/${id}`,
+      fast: true,
+      ads: true,
+    },
+    {
       title: "<Embed>",
       source: `https://embed.su/embed/movie/${id}`,
       ads: true,
@@ -152,6 +158,12 @@ export const getTvShowPlayers = (
       recommended: true,
       fast: true,
       resumable: true,
+    },
+    {
+      title: "EmbedPlay",
+      source: `https://embedplayapi.top/embed/${id}/${season}/${episode}`,
+      fast: true,
+      ads: true,
     },
     {
       title: "<Embed>",

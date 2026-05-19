@@ -20,9 +20,8 @@ globalThis.fetch = async (input: RequestInfo | URL, init?: RequestInit) => {
 
   if (url.includes("api.themoviedb.org")) {
     const urlObj = new URL(url);
-    if (!urlObj.searchParams.has("language")) {
-      urlObj.searchParams.set("language", "pt-BR");
-    }
+     urlObj.searchParams.set("language", "pt-BR");
+     urlObj.searchParams.set("region", "BR");
     const newInput =
       typeof input === "string"
         ? urlObj.toString()
