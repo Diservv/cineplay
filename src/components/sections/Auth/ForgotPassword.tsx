@@ -13,6 +13,8 @@ import { env } from "@/utils/env";
 const AuthForgotPasswordForm: React.FC<AuthFormProps> = ({ setForm }) => {
   const [isVerifying, setIsVerifying] = useState(false);
 
+  const captchaEnabled = Boolean(env.NEXT_PUBLIC_CAPTCHA_SITE_KEY);
+
   const {
     register,
     setValue,
@@ -23,11 +25,12 @@ const AuthForgotPasswordForm: React.FC<AuthFormProps> = ({ setForm }) => {
     mode: "onChange",
     defaultValues: {
       email: "",
+      captchaToken: "",
     },
   });
 
   const onSubmit = handleSubmit(async (data) => {
-    if (isEmpty(data.captchaToken)) {
+    if (captchaEnabled && isEmpty(data.captchaToken)) {
       setIsVerifying(true);
       return;
     }
@@ -79,7 +82,8 @@ const AuthForgotPasswordForm: React.FC<AuthFormProps> = ({ setForm }) => {
         startContent={<Mail className="text-xl" />}
         isDisabled={isSubmitting || isVerifying}
       />
-      {isVerifying && (
+      <input type="hidden" {...register("captchaToken")} />
+      {captchaEnabled && isVerifying && (
         <Turnstile
           className="flex h-fit w-full items-center justify-center"
           siteKey={env.NEXT_PUBLIC_CAPTCHA_SITE_KEY ?? ""}

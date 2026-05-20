@@ -16,6 +16,7 @@ import GoogleLoginButton from "@/components/ui/button/GoogleLoginButton";
 const AuthLoginForm: React.FC<AuthFormProps> = ({ setForm }) => {
   const router = useRouter();
   const [isVerifying, setIsVerifying] = useState(false);
+  const captchaEnabled = Boolean(env.NEXT_PUBLIC_CAPTCHA_SITE_KEY);
 
   const {
     register,
@@ -28,11 +29,12 @@ const AuthLoginForm: React.FC<AuthFormProps> = ({ setForm }) => {
     defaultValues: {
       email: "",
       loginPassword: "",
+      captchaToken: "",
     },
   });
 
   const onSubmit = handleSubmit(async (data) => {
-    if (isEmpty(data.captchaToken)) {
+    if (captchaEnabled && isEmpty(data.captchaToken)) {
       setIsVerifying(true);
       return;
     }
@@ -86,6 +88,7 @@ const AuthLoginForm: React.FC<AuthFormProps> = ({ setForm }) => {
           startContent={<Mail className="text-xl" />}
           isDisabled={isSubmitting || isVerifying}
         />
+        <input type="hidden" {...register("captchaToken")} />
         <PasswordInput
           {...register("loginPassword")}
           isInvalid={!!errors.loginPassword?.message}
@@ -107,7 +110,7 @@ const AuthLoginForm: React.FC<AuthFormProps> = ({ setForm }) => {
             Forgot password?
           </Link>
         </div>
-        {isVerifying && (
+        {captchaEnabled && isVerifying && (
           <Turnstile
             className="flex h-fit w-full items-center justify-center"
             siteKey={env.NEXT_PUBLIC_CAPTCHA_SITE_KEY ?? ""}

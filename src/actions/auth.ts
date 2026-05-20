@@ -13,7 +13,10 @@ import {
   ResetPasswordFormSchema,
 } from "@/schemas/auth";
 import { z } from "zod";
+import { env } from "@/utils/env";
 import { ActionResponse } from "@/types";
+
+const isCaptchaEnabled = Boolean(env.NEXT_PUBLIC_CAPTCHA_SITE_KEY);
 
 /**
  * A generic type for our authentication actions.
@@ -44,7 +47,7 @@ const createAuthAction = <T extends { captchaToken?: string }>(
       return { success: false, message };
     }
 
-    if (!result.data.captchaToken) {
+    if (isCaptchaEnabled && !result.data.captchaToken) {
       return { success: false, message: "Captcha is required." };
     }
 
@@ -62,13 +65,13 @@ const createAuthAction = <T extends { captchaToken?: string }>(
 };
 
 const signInWithEmailAction: AuthAction<LoginFormInput> = async (data, supabase) => {
-  const { data: user, error } = await supabase.auth.signInWithPassword({
+  const signInPayload = {
     email: data.email,
     password: data.loginPassword,
-    options: {
-      captchaToken: data.captchaToken,
-    },
-  });
+    ...(data.captchaToken ? { options: { captchaToken: data.captchaToken } } : {}),
+  };
+
+  const { data: user, error } = await supabase.auth.signInWithPassword(signInPayload);
 
   if (error) return { success: false, message: error.message };
 
@@ -107,13 +110,13 @@ const signUpAction: AuthAction<RegisterFormInput> = async (data, supabase) => {
   }
 
   // Create user
-  const { data: authData, error: signUpError } = await supabase.auth.signUp({
+  const signUpPayload = {
     email: data.email,
     password: data.password,
-    options: {
-      captchaToken: data.captchaToken,
-    },
-  });
+    ...(data.captchaToken ? { options: { captchaToken: data.captchaToken } } : {}),
+  };
+
+  const { data: authData, error: signUpError } = await supabase.auth.signUp(signUpPayload);
 
   if (signUpError) return { success: false, message: signUpError.message };
   if (!authData.user) return { success: false, message: "User not created. Please try again." };
@@ -141,9 +144,10 @@ const sendResetPasswordEmailAction: AuthAction<ForgotPasswordFormInput> = async 
   data,
   supabase,
 ) => {
-  const { error } = await supabase.auth.resetPasswordForEmail(data.email, {
-    captchaToken: data.captchaToken,
-  });
+  const { error } = await supabase.auth.resetPasswordForEmail(
+    data.email,
+    data.captchaToken ? { captchaToken: data.captchaToken } : undefined,
+  );
 
   if (error) return { success: false, message: error.message };
 

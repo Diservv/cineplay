@@ -14,6 +14,7 @@ import { useForm } from "react-hook-form";
 const AuthResetPasswordForm: React.FC = () => {
   const router = useRouter();
   const [isVerifying, setIsVerifying] = useState(false);
+  const captchaEnabled = Boolean(env.NEXT_PUBLIC_CAPTCHA_SITE_KEY);
 
   const {
     watch,
@@ -27,11 +28,12 @@ const AuthResetPasswordForm: React.FC = () => {
     defaultValues: {
       password: "",
       confirm: "",
+      captchaToken: "",
     },
   });
 
   const onSubmit = handleSubmit(async (data) => {
-    if (isEmpty(data.captchaToken)) {
+    if (captchaEnabled && isEmpty(data.captchaToken)) {
       setIsVerifying(true);
       return;
     }
@@ -93,7 +95,8 @@ const AuthResetPasswordForm: React.FC = () => {
         placeholder="Confirm your new password"
         startContent={<LockPassword className="text-xl" />}
       />
-      {isVerifying && (
+      <input type="hidden" {...register("captchaToken")} />
+      {captchaEnabled && isVerifying && (
         <Turnstile
           className="flex h-fit w-full items-center justify-center"
           siteKey={env.NEXT_PUBLIC_CAPTCHA_SITE_KEY ?? ""}

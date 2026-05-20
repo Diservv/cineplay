@@ -14,6 +14,7 @@ import GoogleLoginButton from "@/components/ui/button/GoogleLoginButton";
 
 const AuthRegisterForm: React.FC<AuthFormProps> = ({ setForm }) => {
   const [isVerifying, setIsVerifying] = useState(false);
+  const captchaEnabled = Boolean(env.NEXT_PUBLIC_CAPTCHA_SITE_KEY);
 
   const {
     watch,
@@ -29,11 +30,12 @@ const AuthRegisterForm: React.FC<AuthFormProps> = ({ setForm }) => {
       email: "",
       password: "",
       confirm: "",
+      captchaToken: "",
     },
   });
 
   const onSubmit = handleSubmit(async (data) => {
-    if (isEmpty(data.captchaToken)) {
+    if (captchaEnabled && isEmpty(data.captchaToken)) {
       setIsVerifying(true);
       return;
     }
@@ -108,6 +110,7 @@ const AuthRegisterForm: React.FC<AuthFormProps> = ({ setForm }) => {
           startContent={<LockPassword className="text-xl" />}
           isDisabled={isSubmitting || isVerifying}
         />
+        <input type="hidden" {...register("captchaToken")} />
         <PasswordInput
           {...register("confirm")}
           isInvalid={!!errors.confirm?.message}
@@ -119,7 +122,7 @@ const AuthRegisterForm: React.FC<AuthFormProps> = ({ setForm }) => {
           startContent={<LockPassword className="text-xl" />}
           isDisabled={isSubmitting || isVerifying}
         />
-        {isVerifying && (
+        {captchaEnabled && isVerifying && (
           <Turnstile
             className="flex h-fit w-full items-center justify-center"
             siteKey={env.NEXT_PUBLIC_CAPTCHA_SITE_KEY ?? ""}
