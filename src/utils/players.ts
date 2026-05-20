@@ -12,6 +12,12 @@ import { PlayersProps } from "@/types";
 export const getMoviePlayers = (id: string | number, startAt?: number): PlayersProps[] => {
   return [
     {
+      title: "EmbedPlay",
+      source: `https://embedplayapi.top/embed/${id}`,
+      fast: true,
+      ads: true,
+    },
+    {
       title: "VidLink",
       source: `https://vidlink.pro/movie/${id}?player=jw&primaryColor=006fee&secondaryColor=a2a2a2&iconColor=eefdec&autoplay=false&startAt=${startAt || ""}`,
       recommended: true,
@@ -36,12 +42,6 @@ export const getMoviePlayers = (id: string | number, startAt?: number): PlayersP
       recommended: true,
       fast: true,
       resumable: true,
-    },
-    {
-      title: "EmbedPlay-pt",
-      source: `https://embedplayapi.top/embed/${id}`,
-      fast: true,
-      ads: true,
     },
     {
       title: "<Embed>",
@@ -158,12 +158,6 @@ export const getTvShowPlayers = (
       recommended: true,
       fast: true,
       resumable: true,
-    },
-    {
-      title: "EmbedPlay",
-      source: `https://embedplayapi.top/embed/${id}/${season}/${episode}`,
-      fast: true,
-      ads: true,
     },
     {
       title: "<Embed>",

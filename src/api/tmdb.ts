@@ -8,32 +8,4 @@ if (isEmpty(token)) {
   throw new Error("TMDB_ACCESS_TOKEN is not defined");
 }
 
-// Injeta language=pt-BR em todas as requisições ao TMDB automaticamente
-const originalFetch = globalThis.fetch;
-globalThis.fetch = async (input: RequestInfo | URL, init?: RequestInit) => {
-  const url =
-    typeof input === "string"
-      ? input
-      : input instanceof URL
-      ? input.href
-      : input.url;
-
-  if (url.includes("api.themoviedb.org")) {
-    const urlObj = new URL(url);
-     if (!urlObj.searchParams.has("language")) {
-          urlObj.searchParams.set("language", "pt-BR");
-          urlObj.searchParams.set("region ", "BR");
-        }
-    const newInput =
-      typeof input === "string"
-        ? urlObj.toString()
-        : input instanceof URL
-        ? urlObj
-        : new Request(urlObj.toString(), input);
-    return originalFetch(newInput, init);
-  }
-
-  return originalFetch(input, init);
-};
-
 export const tmdb = new TMDB(token);
