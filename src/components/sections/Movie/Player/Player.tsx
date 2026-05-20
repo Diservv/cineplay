@@ -1,7 +1,6 @@
 import { ADS_WARNING_STORAGE_KEY, SpacingClasses } from "@/utils/constants";
 import { siteConfig } from "@/config/site";
 import useBreakpoints from "@/hooks/useBreakpoints";
-import { useEmbedProtection } from "@/hooks/useEmbedProtection";
 import { cn } from "@/utils/helpers";
 import { mutateMovieTitle } from "@/utils/movies";
 import { getMoviePlayers } from "@/utils/players";
@@ -37,17 +36,10 @@ const MoviePlayer: React.FC<MoviePlayerProps> = ({ movie, startAt }) => {
     parseAsInteger.withDefault(0),
   );
 
-  useEmbedProtection();
   usePlayerEvents({ saveHistory: true });
   useDocumentTitle(`Play ${title} | ${siteConfig.name}`);
 
   const PLAYER = useMemo(() => players[selectedSource] || players[0], [players, selectedSource]);
-
-  const handlePlayerError = () => {
-    if (selectedSource < players.length - 1) {
-      setSelectedSource(selectedSource + 1);
-    }
-  };
 
   return (
     <>
@@ -65,11 +57,8 @@ const MoviePlayer: React.FC<MoviePlayerProps> = ({ movie, startAt }) => {
           {seen && (
             <iframe
               allowFullScreen
-              sandbox="allow-scripts allow-same-origin allow-presentation"
-              referrerPolicy="strict-origin-when-cross-origin"
               key={PLAYER.title}
               src={PLAYER.source}
-              onError={handlePlayerError}
               className={cn("z-10 h-full", { "pointer-events-none": idle && !mobile })}
             />
           )}

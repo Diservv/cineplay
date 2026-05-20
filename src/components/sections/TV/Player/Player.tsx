@@ -8,7 +8,6 @@ import { parseAsInteger, useQueryState } from "nuqs";
 import { memo, useMemo } from "react";
 import { Episode, TvShowDetails } from "tmdb-ts";
 import useBreakpoints from "@/hooks/useBreakpoints";
-import { useEmbedProtection } from "@/hooks/useEmbedProtection";
 import { ADS_WARNING_STORAGE_KEY, SpacingClasses } from "@/utils/constants";
 import { usePlayerEvents } from "@/hooks/usePlayerEvents";
 const AdsWarning = dynamic(() => import("@/components/ui/overlay/AdsWarning"));
@@ -51,7 +50,6 @@ const TvShowPlayer: React.FC<TvShowPlayerProps> = ({
     parseAsInteger.withDefault(0),
   );
 
-  useEmbedProtection();
   usePlayerEvents({
     saveHistory: true,
     metadata: { season: episode.season_number, episode: episode.episode_number },
@@ -61,12 +59,6 @@ const TvShowPlayer: React.FC<TvShowPlayerProps> = ({
   );
 
   const PLAYER = useMemo(() => players[selectedSource] || players[0], [players, selectedSource]);
-
-  const handlePlayerError = () => {
-    if (selectedSource < players.length - 1) {
-      setSelectedSource(selectedSource + 1);
-    }
-  };
 
   return (
     <>
@@ -88,11 +80,8 @@ const TvShowPlayer: React.FC<TvShowPlayerProps> = ({
           {seen && (
             <iframe
               allowFullScreen
-              sandbox="allow-scripts allow-same-origin allow-presentation"
-              referrerPolicy="strict-origin-when-cross-origin"
               key={PLAYER.title}
               src={PLAYER.source}
-              onError={handlePlayerError}
               className={cn("z-10 h-full", { "pointer-events-none": idle && !mobile })}
             />
           )}
