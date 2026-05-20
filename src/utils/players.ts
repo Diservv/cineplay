@@ -134,6 +134,12 @@ export const getTvShowPlayers = (
 ): PlayersProps[] => {
   return [
     {
+      title: "EmbedPlay",
+      source: `https://embedplayapi.top/embed/${id}`,
+      fast: true,
+      ads: true,
+    },
+    {
       title: "VidLink",
       source: `https://vidlink.pro/tv/${id}/${season}/${episode}?player=jw&primaryColor=f5a524&secondaryColor=a2a2a2&iconColor=eefdec&autoplay=false&startAt=${startAt || ""}`,
       recommended: true,
