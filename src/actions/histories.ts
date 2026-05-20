@@ -1,6 +1,6 @@
 "use server";
 
-import { tmdb } from "@/api/tmdb";
+import { tmdb, tmdbLanguage } from "@/api/tmdb";
 import { UnifiedPlayerEventData } from "@/hooks/usePlayerEvents";
 import { ActionResponse } from "@/types";
 import { HistoryDetail } from "@/types/movie";
@@ -53,8 +53,8 @@ export const syncHistory = async (
 
     const media =
       data.mediaType === "movie"
-        ? await tmdb.movies.details(Number(data.mediaId))
-        : await tmdb.tvShows.details(Number(data.mediaId));
+        ? await tmdb.movies.details(Number(data.mediaId), undefined, tmdbLanguage)
+        : await tmdb.tvShows.details(Number(data.mediaId), undefined, tmdbLanguage);
 
     // Insert or update history
     const { data: history, error } = await supabase

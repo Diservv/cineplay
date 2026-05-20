@@ -1,6 +1,6 @@
 "use client";
 
-import { tmdb } from "@/api/tmdb";
+import { tmdb, tmdbLanguage } from "@/api/tmdb";
 import { queryClient } from "@/app/providers";
 import TvShowHomeCard from "@/components/sections/TV/Cards/Poster";
 import BackToTopButton from "@/components/ui/button/BackToTopButton";
@@ -27,8 +27,8 @@ const fetchData = async ({
   type = "movie",
   query,
 }: FetchType): Promise<Search<Movie> | Search<TV>> => {
-  if (type === "movie") return tmdb.search.movies({ query, page });
-  return tmdb.search.tvShows({ query, page });
+  if (type === "movie") return tmdb.search.movies({ query, page, language: tmdbLanguage });
+  return tmdb.search.tvShows({ query, page, language: tmdbLanguage });
 };
 
 const SearchList = () => {

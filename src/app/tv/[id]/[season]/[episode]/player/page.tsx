@@ -1,6 +1,6 @@
 "use client";
 
-import { tmdb } from "@/api/tmdb";
+import { tmdb, tmdbLanguage } from "@/api/tmdb";
 import { Params } from "@/types";
 import { Spinner } from "@heroui/react";
 import { useQuery } from "@tanstack/react-query";
@@ -21,7 +21,7 @@ const TvShowPlayerPage: NextPage<Params<{ id: number; season: number; episode: n
     isPending: isPendingTv,
     error: errorTv,
   } = useQuery({
-    queryFn: () => tmdb.tvShows.details(id),
+    queryFn: () => tmdb.tvShows.details(id, undefined, tmdbLanguage),
     queryKey: ["tv-show-player-details", id],
   });
 

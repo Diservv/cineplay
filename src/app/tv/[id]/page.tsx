@@ -1,6 +1,6 @@
 "use client";
 
-import { tmdb } from "@/api/tmdb";
+import { tmdb, tmdbLanguage } from "@/api/tmdb";
 import { Params } from "@/types";
 import { Spinner } from "@heroui/react";
 import { useScrollIntoView } from "@mantine/hooks";
@@ -28,16 +28,20 @@ const TVShowDetailPage: NextPage<Params<{ id: number }>> = ({ params }) => {
     error,
   } = useQuery({
     queryFn: () =>
-      tmdb.tvShows.details(id, [
-        "images",
-        "videos",
-        "credits",
-        "keywords",
-        "recommendations",
-        "similar",
-        "reviews",
-        "watch/providers",
-      ]),
+      tmdb.tvShows.details(
+        id,
+        [
+          "images",
+          "videos",
+          "credits",
+          "keywords",
+          "recommendations",
+          "similar",
+          "reviews",
+          "watch/providers",
+        ],
+        tmdbLanguage,
+      ),
     queryKey: ["tv-show-detail", id],
   });
 

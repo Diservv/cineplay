@@ -1,4 +1,4 @@
-import { tmdb } from "@/api/tmdb";
+import { tmdb, tmdbLanguage } from "@/api/tmdb";
 import { SiteConfigType } from "@/types";
 import { BiSearchAlt2, BiSolidSearchAlt2 } from "react-icons/bi";
 import { GoHomeFill, GoHome } from "react-icons/go";
@@ -67,62 +67,62 @@ export const siteConfig: SiteConfigType = {
     movies: [
       {
         name: "Today's Trending Movies",
-        query: () => tmdb.trending.trending("movie", "day"),
+        query: () => tmdb.trending.trending("movie", "day", { language: tmdbLanguage }),
         param: "todayTrending",
       },
       {
         name: "This Week's Trending Movies",
-        query: () => tmdb.trending.trending("movie", "week"),
+        query: () => tmdb.trending.trending("movie", "week", { language: tmdbLanguage }),
         param: "thisWeekTrending",
       },
       {
         name: "Popular Movies",
-        query: () => tmdb.movies.popular(),
+        query: () => tmdb.movies.popular({ language: tmdbLanguage }),
         param: "popular",
       },
       {
         name: "Now Playing Movies",
-        query: () => tmdb.movies.nowPlaying(),
+        query: () => tmdb.movies.nowPlaying({ language: tmdbLanguage }),
         param: "nowPlaying",
       },
       {
         name: "Upcoming Movies",
-        query: () => tmdb.movies.upcoming(),
+        query: () => tmdb.movies.upcoming({ language: tmdbLanguage }),
         param: "upcoming",
       },
       {
         name: "Top Rated Movies",
-        query: () => tmdb.movies.topRated(),
+        query: () => tmdb.movies.topRated({ language: tmdbLanguage }),
         param: "topRated",
       },
     ],
     tvShows: [
       {
         name: "Today's Trending TV Shows",
-        query: () => tmdb.trending.trending("tv", "day"),
+        query: () => tmdb.trending.trending("tv", "day", { language: tmdbLanguage }),
         param: "todayTrending",
       },
       {
         name: "This Week's Trending TV Shows",
-        query: () => tmdb.trending.trending("tv", "week"),
+        query: () => tmdb.trending.trending("tv", "week", { language: tmdbLanguage }),
         param: "thisWeekTrending",
       },
       {
         name: "Popular TV Shows",
         // @ts-expect-error: Property 'adult' is missing in type 'PopularTvShowResult' but required in type 'TV'.
-        query: () => tmdb.tvShows.popular(),
+        query: () => tmdb.tvShows.popular({ language: tmdbLanguage }),
         param: "popular",
       },
       {
         name: "On The Air TV Shows",
         // @ts-expect-error: Property 'adult' is missing in type 'OnTheAirResult' but required in type 'TV'.
-        query: () => tmdb.tvShows.onTheAir(),
+        query: () => tmdb.tvShows.onTheAir({ language: tmdbLanguage }),
         param: "onTheAir",
       },
       {
         name: "Top Rated TV Shows",
         // @ts-expect-error: Property 'adult' is missing in type 'TopRatedTvShowResult' but required in type 'TV'.
-        query: () => tmdb.tvShows.topRated(),
+        query: () => tmdb.tvShows.topRated({ language: tmdbLanguage }),
         param: "topRated",
       },
     ],

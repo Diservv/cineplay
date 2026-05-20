@@ -1,6 +1,6 @@
 "use server";
 
-import { tmdb } from "@/api/tmdb";
+import { tmdb, tmdbLanguage } from "@/api/tmdb";
 import { ActionResponse } from "@/types";
 import { isEmpty } from "@/utils/helpers";
 
@@ -24,8 +24,8 @@ export const getSearchSuggestions = async (
     }
 
     const [movies, tvShows] = await Promise.all([
-      tmdb.search.movies({ query, page: 1 }),
-      tmdb.search.tvShows({ query, page: 1 }),
+      tmdb.search.movies({ query, page: 1, language: tmdbLanguage }),
+      tmdb.search.tvShows({ query, page: 1, language: tmdbLanguage }),
     ]);
 
     const movieSuggestions: SearchSuggestion[] = movies.results.map((movie) => ({

@@ -8,4 +8,5 @@ if (isEmpty(token)) {
   throw new Error("TMDB_ACCESS_TOKEN is not defined");
 }
 
+export const tmdbLanguage = "pt-BR" as const;
 export const tmdb = new TMDB(token);

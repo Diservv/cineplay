@@ -1,6 +1,6 @@
 "use client";
 
-import { tmdb } from "@/api/tmdb";
+import { tmdb, tmdbLanguage } from "@/api/tmdb";
 import ThreeDMarquee from "@/components/ui/background/ThreeDMarquee";
 import IconButton from "@/components/ui/button/IconButton";
 import Brand from "@/components/ui/other/BrandLogo";
