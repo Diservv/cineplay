@@ -39,7 +39,7 @@ export default function EmbedPlayer({
         src={src}
         sandbox="allow-scripts allow-same-origin allow-presentation"
         allowFullScreen
-        referrerPolicy="no-referrer"
+        referrerPolicy="strict-origin-when-cross-origin"
         title="Video Player"
         style={{ width: "100%", height: "100%", border: "none" }}
       />

@@ -89,7 +89,7 @@ const TvShowPlayer: React.FC<TvShowPlayerProps> = ({
             <iframe
               allowFullScreen
               sandbox="allow-scripts allow-same-origin allow-presentation"
-              referrerPolicy="no-referrer"
+              referrerPolicy="strict-origin-when-cross-origin"
               key={PLAYER.title}
               src={PLAYER.source}
               onError={handlePlayerError}
