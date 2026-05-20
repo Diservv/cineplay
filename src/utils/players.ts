@@ -146,8 +146,8 @@ export const getTvShowPlayers = (
       ads: true,
     },
     {
-      title: "SERVER2-BR",
-      source: `https://myembed.biz/serie/${id}/${season}/${episode}?player=jw&primaryColor=f5a524&secondaryColor=a2a2a2&iconColor=eefdec&autoplay=true&startAt=${startAt || ""}`,
+      title: "EmbedPlay",
+      source: `https://embedplayapi.top/embed/${id}/${season}/${episode}?player=jw&primaryColor=f5a524&secondaryColor=a2a2a2&iconColor=eefdec&autoplay=true&startAt=${startAt || ""}`,
       fast: true,
       ads: true,
     },
