@@ -13,13 +13,13 @@ export const getMoviePlayers = (id: string | number, startAt?: number): PlayersP
   return [
     {
       title: "EmbedPlay",
-      source: `https://embedplayapi.top/embed/${id}`,
+      source: `https://embedplayapi.top/embed/${id}?player=jw&primaryColor=f5a524&secondaryColor=a2a2a2&iconColor=eefdec&autoplay=true&startAt=${startAt || ""}`,
       fast: true,
       ads: true,
     },
     {
       title: "VidLink",
-      source: `https://vidlink.pro/movie/${id}?player=jw&primaryColor=006fee&secondaryColor=a2a2a2&iconColor=eefdec&autoplay=false&startAt=${startAt || ""}`,
+      source: `https://vidlink.pro/movie/${id}?player=jw&primaryColor=006fee&secondaryColor=a2a2a2&iconColor=eefdec&autoplay=true&startAt=${startAt || ""}`,
       recommended: true,
       fast: true,
       ads: true,
@@ -27,7 +27,7 @@ export const getMoviePlayers = (id: string | number, startAt?: number): PlayersP
     },
     {
       title: "VidLink 2",
-      source: `https://vidlink.pro/movie/${id}?primaryColor=006fee&autoplay=false&startAt=${startAt}`,
+      source: `https://vidlink.pro/movie/${id}?primaryColor=006fee&autoplay=true&startAt=${startAt}`,
       recommended: true,
       fast: true,
       ads: true,
@@ -38,7 +38,7 @@ export const getMoviePlayers = (id: string | number, startAt?: number): PlayersP
       // NOTE: VidKing has a known issue with the `progress` query parameter where it stuck at that timestamp.
       // Currently, this player can save playback progress but cannot resume from a specific timestamp.
       // The `progress` parameter is commented out in the source URL until this is resolved.
-      source: `https://www.vidking.net/embed/movie/${id}?color=006fee&autoplay=false`, //&progress=${startAt || ""}`,
+      source: `https://www.vidking.net/embed/movie/${id}?color=006fee&autoplay=true`, //&progress=${startAt || ""}`,
       recommended: true,
       fast: true,
       resumable: true,
@@ -97,12 +97,12 @@ export const getMoviePlayers = (id: string | number, startAt?: number): PlayersP
     },
     {
       title: "VidSrc 4",
-      source: `https://vidsrc.cc/v2/embed/movie/${id}?autoPlay=false`,
+      source: `https://vidsrc.cc/v2/embed/movie/${id}?autoPlay=true`,
       ads: true,
     },
     {
       title: "VidSrc 5",
-      source: `https://vidsrc.cc/v3/embed/movie/${id}?autoPlay=false`,
+      source: `https://vidsrc.cc/v3/embed/movie/${id}?autoPlay=true`,
       recommended: true,
       fast: true,
       ads: true,
@@ -135,13 +135,13 @@ export const getTvShowPlayers = (
   return [
     {
       title: "EmbedPlay",
-      source: `https://embedplayapi.top/embed/${id}`,
+      source: `https://embedplayapi.top/embed/${id}/${season}/${episode}?player=jw&primaryColor=f5a524&secondaryColor=a2a2a2&iconColor=eefdec&autoplay=true&startAt=${startAt || ""}`,
       fast: true,
       ads: true,
     },
     {
       title: "VidLink",
-      source: `https://vidlink.pro/tv/${id}/${season}/${episode}?player=jw&primaryColor=f5a524&secondaryColor=a2a2a2&iconColor=eefdec&autoplay=false&startAt=${startAt || ""}`,
+      source: `https://vidlink.pro/tv/${id}/${season}/${episode}?player=jw&primaryColor=f5a524&secondaryColor=a2a2a2&iconColor=eefdec&autoplay=true&startAt=${startAt || ""}`,
       recommended: true,
       fast: true,
       ads: true,
@@ -149,7 +149,7 @@ export const getTvShowPlayers = (
     },
     {
       title: "VidLink 2",
-      source: `https://vidlink.pro/tv/${id}/${season}/${episode}?primaryColor=f5a524&autoplay=false&startAt=${startAt}`,
+      source: `https://vidlink.pro/tv/${id}/${season}/${episode}?primaryColor=f5a524&autoplay=true&startAt=${startAt}`,
       recommended: true,
       fast: true,
       ads: true,
@@ -160,7 +160,7 @@ export const getTvShowPlayers = (
       // NOTE: VidKing has a known issue with the `progress` query parameter where it stuck at that timestamp.
       // Currently, this player can save playback progress but cannot resume from a specific timestamp.
       // The `progress` parameter is commented out in the source URL until this is resolved.
-      source: `https://www.vidking.net/embed/tv/${id}/${season}/${episode}?color=f5a524&autoplay=false`, //&progress=${startAt || ""}`,
+      source: `https://www.vidking.net/embed/tv/${id}/${season}/${episode}?color=f5a524&autoplay=true`, //&progress=${startAt || ""}`,
       recommended: true,
       fast: true,
       resumable: true,
@@ -219,12 +219,12 @@ export const getTvShowPlayers = (
     },
     {
       title: "VidSrc 4",
-      source: `https://vidsrc.cc/v2/embed/tv/${id}/${season}/${episode}?autoPlay=false`,
+      source: `https://vidsrc.cc/v2/embed/tv/${id}/${season}/${episode}?autoPlay=true`,
       ads: true,
     },
     {
       title: "VidSrc 5",
-      source: `https://vidsrc.cc/v3/embed/tv/${id}/${season}/${episode}?autoPlay=false`,
+      source: `https://vidsrc.cc/v3/embed/tv/${id}/${season}/${episode}?autoPlay=true`,
       recommended: true,
       fast: true,
       ads: true,
