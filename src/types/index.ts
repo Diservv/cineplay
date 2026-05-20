@@ -70,6 +70,12 @@ export type PlayersProps = {
   resumable?: boolean;
 };
 
+export type EmbedProvider = {
+  name: string;
+  movieUrl: (tmdbId: string | number) => string;
+  tvUrl: (tmdbId: string | number, season: number, episode: number) => string;
+};
+
 export type Settings = {
   theme: "light" | "dark" | "system";
   showSpecialSeason: boolean;

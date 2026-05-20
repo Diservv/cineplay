@@ -14,6 +14,23 @@ const withPWA = withPWAInit({
 });
 
 const nextConfig: NextConfig = {
+  async headers() {
+    return [
+      {
+        source: "/(.*)",
+        headers: [
+          {
+            key: "Permissions-Policy",
+            value: "geolocation=(), camera=(), microphone=(), payment=()",
+          },
+          {
+            key: "Referrer-Policy",
+            value: "no-referrer",
+          },
+        ],
+      },
+    ];
+  },
   // https://github.com/payloadcms/payload/issues/12550#issuecomment-2939070941
   turbopack: {
     resolveExtensions: [".mdx", ".tsx", ".ts", ".jsx", ".js", ".mjs", ".json"],
