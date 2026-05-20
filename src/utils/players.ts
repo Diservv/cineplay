@@ -12,8 +12,14 @@ import { PlayersProps } from "@/types";
 export const getMoviePlayers = (id: string | number, startAt?: number): PlayersProps[] => {
   return [
     {
-      title: "EmbedPlay",
+      title: "SERVER1-BR",
       source: `https://embedplayapi.top/embed/${id}?player=jw&primaryColor=f5a524&secondaryColor=a2a2a2&iconColor=eefdec&autoplay=true&startAt=${startAt || ""}`,
+      fast: true,
+      ads: true,
+    },
+    {
+      title: "SERVER2-BR",
+      source: `https://myembed.biz/filme/${id}?player=jw&primaryColor=f5a524&secondaryColor=a2a2a2&iconColor=eefdec&autoplay=true&startAt=${startAt || ""}`,
       fast: true,
       ads: true,
     },
@@ -134,8 +140,14 @@ export const getTvShowPlayers = (
 ): PlayersProps[] => {
   return [
     {
-      title: "EmbedPlay",
-      source: `https://embedplayapi.top/embed/${id}/${season}/${episode}?player=jw&primaryColor=f5a524&secondaryColor=a2a2a2&iconColor=eefdec&autoplay=true&startAt=${startAt || ""}`,
+      title: "SERVER1-BR",
+      source: `https://myembed.biz/serie/${id}/${season}/${episode}?player=jw&primaryColor=f5a524&secondaryColor=a2a2a2&iconColor=eefdec&autoplay=true&startAt=${startAt || ""}`,
+      fast: true,
+      ads: true,
+    },
+    {
+      title: "SERVER2-BR",
+      source: `https://myembed.biz/serie/${id}/${season}/${episode}?player=jw&primaryColor=f5a524&secondaryColor=a2a2a2&iconColor=eefdec&autoplay=true&startAt=${startAt || ""}`,
       fast: true,
       ads: true,
     },
