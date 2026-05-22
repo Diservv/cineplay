@@ -89,7 +89,7 @@ const Disclaimer: React.FC = () => {
 
   const [isOpen, { close }] = useDisclosure(shouldShowModal);
 
-  useInterval(() => setSecondsRemaining((prev) => Math.max(0, prev - 1)), 300, {
+  useInterval(() => setSecondsRemaining((prev) => Math.max(0, prev - 1)), 500, {
     autoInvoke: shouldShowModal && secondsRemaining > 0,
   });
 
