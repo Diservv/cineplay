@@ -14,7 +14,7 @@ import {
 import { DISCLAIMER_STORAGE_KEY, IS_BROWSER } from "@/utils/constants";
 import { cn } from "@/utils/helpers";
 
-const COUNTDOWN_DURATION = 10;
+const COUNTDOWN_DURATION = 3;
 const MODAL_SIZE = "3xl";
 const DISCLAIMER_CONTENT = {
   title: "Disclaimer",
@@ -26,7 +26,7 @@ const DISCLAIMER_CONTENT = {
     },
     {
       id: "purpose",
-      content: "Cinextma is developed solely for",
+      content: "Cineplay is developed solely for",
       emphasis: "educational and learning purposes.",
       continuation:
         "This website is an project intended to demonstrate web development skills and is not meant to promote or encourage digital piracy in any form.",
