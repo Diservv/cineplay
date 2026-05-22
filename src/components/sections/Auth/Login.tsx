@@ -34,12 +34,28 @@ const AuthLoginForm: React.FC<AuthFormProps> = ({ setForm }) => {
   });
 
   const onSubmit = handleSubmit(async (data) => {
+    console.log("Login form submitted with data:", data);
+    
     if (captchaEnabled && isEmpty(data.captchaToken)) {
+      console.log("Captcha enabled, showing captcha");
       setIsVerifying(true);
       return;
     }
 
-    const { success, message } = await signIn(data);
+    console.log("Calling signIn action...");
+    const result = await signIn(data);
+    console.log("SignIn result:", result);
+
+    if (!result) {
+      console.error("No result returned from signIn");
+      addToast({
+        title: "No response from server",
+        color: "danger",
+      });
+      return;
+    }
+
+    const { success, message } = result;
 
     addToast({
       title: message,
@@ -47,11 +63,13 @@ const AuthLoginForm: React.FC<AuthFormProps> = ({ setForm }) => {
     });
 
     if (!success) {
+      console.log("Login failed, resetting captcha");
       setValue("captchaToken", undefined);
       setIsVerifying(false);
       return;
     }
 
+    console.log("Login successful, redirecting to /");
     return router.push("/");
   });
 

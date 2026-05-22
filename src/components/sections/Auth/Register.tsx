@@ -35,14 +35,31 @@ const AuthRegisterForm: React.FC<AuthFormProps> = ({ setForm }) => {
   });
 
   const onSubmit = handleSubmit(async (data) => {
+    console.log("Register form submitted with data:", data);
+    
     if (captchaEnabled && isEmpty(data.captchaToken)) {
+      console.log("Captcha enabled, showing captcha");
       setIsVerifying(true);
       return;
     }
 
-    const { success, message } = await signUp(data);
+    console.log("Calling signUp action...");
+    const result = await signUp(data);
+    console.log("SignUp result:", result);
+
+    if (!result) {
+      console.error("No result returned from signUp");
+      addToast({
+        title: "No response from server",
+        color: "danger",
+      });
+      return;
+    }
+
+    const { success, message } = result;
 
     if (!success) {
+      console.log("Signup failed, resetting captcha");
       setValue("captchaToken", undefined);
       setIsVerifying(false);
     }

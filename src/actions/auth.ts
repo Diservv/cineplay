@@ -23,9 +23,12 @@ const isCaptchaEnabled = Boolean(env.NEXT_PUBLIC_CAPTCHA_SITE_KEY);
  * @template T The type of the form data.
  * @param data The validated form data.
  * @param supabase The Supabase client instance.
- * @returns An ActionResponse.
+ * @returns An object with success status and message.
  */
-type AuthAction<T> = (data: T, supabase: SupabaseClient) => ActionResponse;
+type AuthAction<T> = (data: T, supabase: SupabaseClient) => Promise<{
+  success: boolean;
+  message: string;
+}>;
 
 /**
  * A higher-order function to create a server action that handles
@@ -41,21 +44,32 @@ const createAuthAction = <T extends { captchaToken?: string }>(
   admin?: boolean,
 ) => {
   return async (formData: T): ActionResponse => {
+    console.log("createAuthAction called with data:", formData);
+    
     const result = schema.safeParse(formData);
+    console.log("Schema parse result:", result);
+    
     if (!result.success) {
       const message = result.error.issues.map((issue) => issue.message).join(". ");
+      console.error("Validation failed:", message);
       return { success: false, message };
     }
 
     if (isCaptchaEnabled && !result.data.captchaToken) {
+      console.error("Captcha is required but not provided");
       return { success: false, message: "Captcha is required." };
     }
 
     try {
+      console.log("Creating Supabase client...");
       const supabase = await createClient(admin);
-      return await action(result.data, supabase);
+      console.log("Supabase client created, calling action...");
+      const actionResult = await action(result.data, supabase);
+      console.log("Action completed with result:", actionResult);
+      return actionResult;
     } catch (error) {
       // Catch potential unhandled errors in actions
+      console.error("Error in createAuthAction:", error);
       if (error instanceof Error) {
         return { success: false, message: error.message };
       }
@@ -65,79 +79,120 @@ const createAuthAction = <T extends { captchaToken?: string }>(
 };
 
 const signInWithEmailAction: AuthAction<LoginFormInput> = async (data, supabase) => {
-  const signInPayload = {
-    email: data.email,
-    password: data.loginPassword,
-    ...(data.captchaToken ? { options: { captchaToken: data.captchaToken } } : {}),
-  };
-
-  const { data: user, error } = await supabase.auth.signInWithPassword(signInPayload);
-
-  if (error) return { success: false, message: error.message };
-
-  const { data: username, error: usernameError } = await supabase
-    .from("profiles")
-    .select("username")
-    .eq("id", user.user.id)
-    .maybeSingle();
-
-  if (!username) {
-    console.error("Username check error:", usernameError);
-    return {
-      success: false,
-      message: `Database error. Could not get username for ${user.user.email}.`,
+  try {
+    const signInPayload = {
+      email: data.email,
+      password: data.loginPassword,
+      ...(data.captchaToken ? { options: { captchaToken: data.captchaToken } } : {}),
     };
-  }
 
-  return { success: true, message: `Welcome back, ${username.username}` };
+    const { data: authData, error } = await supabase.auth.signInWithPassword(signInPayload);
+
+    if (error) {
+      console.error("Sign in error:", error);
+      return { success: false, message: error.message };
+    }
+
+    if (!authData || !authData.user) {
+      console.error("No user data returned from sign in");
+      return { success: false, message: "Authentication failed. No user data returned." };
+    }
+
+    const userId = authData.user.id;
+
+    const { data: profile, error: profileError } = await supabase
+      .from("profiles")
+      .select("username")
+      .eq("id", userId)
+      .maybeSingle();
+
+    if (profileError) {
+      console.error("Profile fetch error:", profileError);
+      return {
+        success: false,
+        message: "Could not fetch user profile.",
+      };
+    }
+
+    if (!profile) {
+      console.error("No profile found for user:", userId);
+      return {
+        success: false,
+        message: "User profile not found. Please contact support.",
+      };
+    }
+
+    return { success: true, message: `Welcome back, ${profile.username}` };
+  } catch (err) {
+    console.error("Unexpected error in signIn:", err);
+    return { success: false, message: "An unexpected error occurred during sign in." };
+  }
 };
 
 const signUpAction: AuthAction<RegisterFormInput> = async (data, supabase) => {
-  // Check username availability
-  const { data: usernameExists, error: usernameError } = await supabase
-    .from("profiles")
-    .select("id")
-    .eq("username", data.username)
-    .maybeSingle();
+  try {
+    // Check username availability
+    const { data: usernameExists, error: usernameError } = await supabase
+      .from("profiles")
+      .select("id")
+      .eq("username", data.username)
+      .maybeSingle();
 
-  if (usernameError) {
-    console.error("Username check error:", usernameError);
-    return { success: false, message: "Database error. Could not check username availability." };
+    if (usernameError) {
+      console.error("Username check error:", usernameError);
+      return { success: false, message: "Database error. Could not check username availability." };
+    }
+
+    if (usernameExists) {
+      return { success: false, message: "Username already taken." };
+    }
+
+    // Create user
+    const signUpPayload = {
+      email: data.email,
+      password: data.password,
+      ...(data.captchaToken ? { options: { captchaToken: data.captchaToken } } : {}),
+    };
+
+    const { data: authData, error: signUpError } = await supabase.auth.signUp(signUpPayload);
+
+    if (signUpError) {
+      console.error("Sign up error:", signUpError);
+      return { success: false, message: signUpError.message };
+    }
+
+    if (!authData || !authData.user) {
+      console.error("No user data returned from sign up");
+      return { success: false, message: "User not created. Please try again." };
+    }
+
+    const userId = authData.user.id;
+
+    // Insert profile
+    const { error: profileError } = await supabase
+      .from("profiles")
+      .insert({ id: userId, username: data.username });
+
+    if (profileError) {
+      console.error("Profile creation error:", profileError);
+      return { 
+        success: false, 
+        message: "Could not create user profile. Please contact support." 
+      };
+    }
+
+    return {
+      success: true,
+      message:
+        "Sign up successful. Please check your email for verification. Check spam folder if you don't see it.",
+    };
+  } catch (err) {
+    console.error("Unexpected error in signUp:", err);
+    return { 
+      success: false, 
+      message: "An unexpected error occurred during sign up." 
+    };
   }
-
-  if (usernameExists) {
-    return { success: false, message: "Username already taken." };
-  }
-
-  // Create user
-  const signUpPayload = {
-    email: data.email,
-    password: data.password,
-    ...(data.captchaToken ? { options: { captchaToken: data.captchaToken } } : {}),
-  };
-
-  const { data: authData, error: signUpError } = await supabase.auth.signUp(signUpPayload);
-
-  if (signUpError) return { success: false, message: signUpError.message };
-  if (!authData.user) return { success: false, message: "User not created. Please try again." };
-
-  // Insert profile
-  const { error: profileError } = await supabase
-    .from("profiles")
-    .insert({ id: authData.user.id, username: data.username });
-
-  if (profileError) {
-    console.error("Profile creation error:", profileError);
-    // This is a critical error. The user exists in auth but not in profiles.
-    // It's better to return a generic error and log it for investigation.
-    return { success: false, message: "Could not create user profile. Please contact support." };
-  }
-
-  return {
-    success: true,
-    message:
-      "Sign up successful. Please check your email for verification. Check spam folder if you don't see it.",
-  };
 };
 
 const sendResetPasswordEmailAction: AuthAction<ForgotPasswordFormInput> = async (
